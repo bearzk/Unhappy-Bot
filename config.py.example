@@ -1,3 +1,6 @@
 Config = {
-    'token': 'YourToken'
+    'token': 'YourToken',
+    'authorized': [
+        user_id_in_number
+    ]
 }
