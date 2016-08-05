@@ -1,6 +1,8 @@
 from config import Config
 from telegram.ext.dispatcher import run_async
 
+from callback_decorators import authorized
+
 @run_async
 def start(bot, update):
     bot.sendMessage(chat_id=update.message.chat_id, text="I'm a robot, please talk to me!")
@@ -13,9 +15,7 @@ def whoami(bot, update):
     bot.sendMessage(chat_id=update.message.chat_id, text=text)
 
 @run_async
+@authorized
 def scream(bot, update):
-    user = update.message.from_user
-    message = "You are not allowed here"
-    if user.id in Config['authorized']:
-        message = "You should be happy"
+    message = "You are authorized to run this command"
     bot.sendMessage(chat_id=update.message.chat_id, text=message)

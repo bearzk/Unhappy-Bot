@@ -23,6 +23,6 @@ dispatcher.add_handler(whoami_handler)
 dispatcher.add_handler(scream_handeler)
 dispatcher.add_handler(echo_handler)
 
-updater.start_polling()
+updater.start_polling(1)
 
 updater.idle()
