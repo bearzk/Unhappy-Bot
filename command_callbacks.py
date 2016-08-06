@@ -1,3 +1,6 @@
+from os import system
+from datetime import timedelta
+
 from config import Config
 from telegram.ext.dispatcher import run_async
 
@@ -16,6 +19,9 @@ def whoami(bot, update):
 
 @run_async
 @authorized
-def scream(bot, update):
-    message = "You are authorized to run this command"
-    bot.sendMessage(chat_id=update.message.chat_id, text=message)
+def stats(bot, update):
+    with open('/proc/uptime', 'r') as f:
+        uptime_seconds = float(f.readline().split()[0])
+        uptime_string = str(timedelta(seconds = uptime_seconds))
+
+    bot.sendMessage(chat_id=update.message.chat_id, text=uptime_string)
