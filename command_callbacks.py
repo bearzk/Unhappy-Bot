@@ -31,7 +31,7 @@ def stats(bot, update):
 def translate(bot, update):
     source = update.message.text.replace('/trans ', '').strip()
     if source:
-        query = "https://glosbe.com/gapi/translate?from=deu&dest=eng&format=json&phrase=%s" % source.lower()
+        query = "https://glosbe.com/gapi/translate?from=deu&dest=eng&format=json&phrase=%s" % source
         res = requests.get(query)
         translations = res.json()['tuc']
         if translations:
