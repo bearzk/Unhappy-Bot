@@ -2,7 +2,7 @@ import logging
 from config import Config
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 
-from command_callbacks import start, whoami, stats
+from command_callbacks import start, whoami, stats, translate
 from message_callbacks import echo
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -15,12 +15,14 @@ dispatcher = updater.dispatcher
 start_handler = CommandHandler('start', start)
 whoami_handler = CommandHandler('whoami', whoami)
 stats_handeler = CommandHandler('stats', stats)
+translate_handler = CommandHandler('trans', translate)
 
 echo_handler = MessageHandler([Filters.text], echo)
 
 dispatcher.add_handler(start_handler)
 dispatcher.add_handler(whoami_handler)
 dispatcher.add_handler(stats_handeler)
+dispatcher.add_handler(translate_handler)
 
 dispatcher.add_handler(echo_handler)
 
