@@ -28,16 +28,19 @@ def stats(bot, update):
     bot.sendMessage(chat_id=update.message.chat_id, text=uptime_string)
 
 @run_async
-def translate(bot, update):
-    source = update.message.text.replace('/trans ', '').strip()
-    if source:
-        query = "https://glosbe.com/gapi/translate?from=deu&dest=eng&format=json&phrase=%s" % source
-        res = requests.get(query)
-        translations = res.json()['tuc']
-        if translations:
-            trans = [t['phrase']['text'] for t in translations if t.has_key('phrase')]
-            message = "Translations found for word %s :\n" % source
-            message += "\n".join(trans)
-        else:
-            message = "No translation found for word %s" % source
+def trans(bot, update):
+    word = update.message.text.replace('/trans ', '').strip()
+    if word:
+        message = _trans(word)
         bot.sendMessage(chat_id=update.message.chat_id, text=message)
+
+def _trans(word, origin='deu', dest='eng'):
+    query = "https://glosbe.com/gapi/translate?from=%s&dest=%s&format=json&phrase=%s" % (origin, dest, word)
+    res = requests.get(query)
+    translations = res.json()['tuc']
+    message = "No translation found for word %s" % word
+    if translations:
+        trans = [t['phrase']['text'] for t in translations if t.has_key('phrase')]
+        message = "Translations found for word %s :\n" % word
+        message += "\n".join(trans)
+    return message
