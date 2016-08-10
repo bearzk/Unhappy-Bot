@@ -1,6 +1,7 @@
 from os import system
 from datetime import timedelta
 
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext.dispatcher import run_async
 import requests
 
@@ -31,8 +32,27 @@ def stats(bot, update):
 def trans(bot, update):
     word = update.message.text.replace('/trans ', '').strip()
     if word:
-        message = _trans(word)
-        bot.sendMessage(chat_id=update.message.chat_id, text=message)
+
+        keyboard = [
+            [
+                InlineKeyboardButton("De->En", callback_data=" ".join([word, 'deu', 'eng'])),
+                InlineKeyboardButton("En->De", callback_data=" ".join([word, 'eng', 'deu']))
+            ]
+        ]
+
+        reply_markup = InlineKeyboardMarkup(keyboard)
+        bot.sendMessage(chat_id=update.message.chat_id,
+            text="Between which languages?", reply_markup=reply_markup)
+
+def trans_callback(bot, update):
+    query = update.callback_query
+    params = query.data.split(" ")
+    message = _trans(*params)
+    bot.editMessageText(
+        text=message,
+        chat_id=query.message.chat_id,
+        message_id=query.message.message_id
+    )
 
 def _trans(word, origin='deu', dest='eng'):
     query = "https://glosbe.com/gapi/translate?from=%s&dest=%s&format=json&phrase=%s" % (origin, dest, word)
@@ -44,3 +64,7 @@ def _trans(word, origin='deu', dest='eng'):
         message = "Translations found for word %s :\n" % word
         message += "\n".join(trans)
     return message
+
+@run_async
+def try_inline(bot, update):
+    bot.sendMessage(chat_id=update.message.chat_id)

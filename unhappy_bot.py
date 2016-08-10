@@ -1,8 +1,8 @@
 import logging
 from config import Config
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackQueryHandler
 
-from command_callbacks import start, whoami, stats, trans
+from command_callbacks import start, whoami, stats, trans, trans_callback
 from message_callbacks import echo
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -20,10 +20,13 @@ def main():
 
     echo_handler = MessageHandler([Filters.text], echo)
 
+    trans_callback_handler = CallbackQueryHandler(trans_callback)
+
     dispatcher.add_handler(start_handler)
     dispatcher.add_handler(whoami_handler)
     dispatcher.add_handler(stats_handeler)
     dispatcher.add_handler(trans_handler)
+    dispatcher.add_handler(trans_callback_handler)
 
     dispatcher.add_handler(echo_handler)
 
