@@ -44,6 +44,7 @@ def trans(bot, update):
         bot.sendMessage(chat_id=update.message.chat_id,
             text="Between which languages?", reply_markup=reply_markup)
 
+@run_async
 def trans_callback(bot, update):
     query = update.callback_query
     params = query.data.split(" ")
@@ -66,5 +67,32 @@ def _trans(word, origin='deu', dest='eng'):
     return message
 
 @run_async
-def try_inline(bot, update):
-    bot.sendMessage(chat_id=update.message.chat_id)
+def game(bot, update):
+    text =
+    """
+    Ok let's play guess number!
+
+    I have a number between 0 and 100 in my mind.
+    You guess what it is, I can only tell you if you answer is larger or smaller.
+    If you manage to guess it within 10 tries, you win!
+    ready to play?
+    """
+
+    keyboard = [
+        [
+            InlineKeyboardButton("Yes", callback_data=True)
+            InlineKeyboardButton("No", callback_data=False)
+        ]
+    ]
+
+    reply_markup=InlineKeyboardMarkup(keyboard)
+
+    bot.sendMessage(chat_id=update.message.chat_id
+        text=text
+        reply_markup=reply_markup
+    )
+
+@run_async
+def game_callback(bot, update):
+    data = update.callback_query.data
+    bot
