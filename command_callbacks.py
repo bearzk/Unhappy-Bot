@@ -60,7 +60,7 @@ def _trans(word, origin='deu', dest='eng'):
     translations = res.json()['tuc']
     message = "No translation found for word %s" % word
     if translations:
-        trans = [t['phrase']['text'] for t in translations if t.has_key('phrase')]
+        trans = [t['phrase']['text'] for t in translations[:10] if t.has_key('phrase')]
         message = "Translations found for word %s :\n" % word
         message += "\n".join(trans)
     return message
